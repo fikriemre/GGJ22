@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform bookModelRoot;
     private bool _levelControl = false;
     private bool _bookTurning = false;
-
+    private bool bookCanTurn = false;
     private void Start()
     {
         subLevels[0].SetLevelSelection(false);
@@ -39,12 +39,15 @@ public class LevelManager : MonoBehaviour
         subLevels[1].SetLevelSelection(false);
         subLevels[1].gameObject.SetActive(false);
         bookModelRoot.gameObject.SetActive(false);
+        bookCanTurn = true;
         TurnBook();
     }
 
     [Button]
     public void TurnBook()
     {
+        if(!bookCanTurn)
+            return;
         if (_bookTurning)
             return;
 
@@ -93,7 +96,7 @@ public class LevelManager : MonoBehaviour
         newSelectedLevel.transform.SetParent(modelRoot);
         bookModelRoot.transform.SetParent(modelRoot);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         float startRotation = modelRoot.rotation.eulerAngles.y;
         float timer = 0;
         bool gameObjectEnabled = false;
@@ -119,7 +122,7 @@ public class LevelManager : MonoBehaviour
         TurnCam.gameObject.SetActive(false);
         subLevels[0].SetLevelSelection(oldSelectedLevel != subLevels[0]);
         subLevels[1].SetLevelSelection(oldSelectedLevel != subLevels[1]);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         modelRoot.rotation = Quaternion.Euler(0, startRotation + 180, 0);
         _bookTurning = false;
         bookModelRoot.gameObject.SetActive(false);
